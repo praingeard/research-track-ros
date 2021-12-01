@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node pkg="stage_ros" type="stageros" name="robot_node" args="$(find second_assignment)/world/my_world.world" output="screen">
+    </node>
+    <node pkg="robot_control" type="angle_filter" name="scan_left_node" output="screen">
+      <param name="scan_topic" value="scan_left"/>
+      <param name="min_angle" value="0.7"/>
+      <param name="max_angle" value="1.6"/>
+    </node>
+    <node pkg="robot_control" type="angle_filter" name="scan_right_node" output="screen">
+      <param name="scan_topic" value="scan_right"/>
+      <param name="min_angle" value="-1.6"/>
+      <param name="max_angle" value="-0.7"/>
+    </node>
+    <node pkg="robot_control" type="angle_filter" name="scan_right_front_node" output="screen">
+      <param name="scan_topic" value="scan_right_front"/>
+      <param name="min_angle" value="-0.5"/>
+      <param name="max_angle" value="0.0"/>
+    </node>
+    <node pkg="robot_control" type="angle_filter" name="scan_left_front_node" output="screen">
+      <param name="scan_topic" value="scan_left_front"/>
+      <param name="min_angle" value="0.0"/>
+      <param name="max_angle" value="0.5"/>
+    </node>
+    <node pkg="robot_control" type="control" name="control_node" output="screen">
+    </node>
+    <node pkg="robot_control" type="ui" name="ui_node" output="screen">
+    </node>
+</launch>
