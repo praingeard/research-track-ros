@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "std_msgs/Float64.h"
+#include "std_srvs/Empty.h"
 
 
 //setup publisher and scans
@@ -16,6 +17,26 @@ double scan_fr;
 
 //default speed value
 double lin_speed = 1.0;
+
+//service to add speed
+bool add(std_srvs::Empty::Request  &req,
+            std_srvs::Empty::Response &res)
+   {
+    //add 20% of current speed
+    lin_speed = lin_speed*1.2;
+    std::cout << "speed increased to " << lin_speed << std::endl;
+    return true;
+   }
+
+//service to reduce speed
+bool reduce(std_srvs::Empty::Request  &req,
+            std_srvs::Empty::Response &res)
+   {
+    //reduce 20% of current speed
+    lin_speed = lin_speed*0.8;
+    std::cout << "speed reduced to " << lin_speed << std::endl;
+    return true;
+   }
 
 //get all scan messages
 void scanLeftCallback(const sensor_msgs::LaserScan &msg)
@@ -34,11 +55,6 @@ void scanFrontLeftCallback(const sensor_msgs::LaserScan &msg)
 void scanFrontRightCallback(const sensor_msgs::LaserScan &msg)
 {
     scan_fr = msg.range_min;
-}
-
-//get current speed
-void speedCallback(const std_msgs::Float64 &msg){
-    lin_speed = msg.data;
 }
 
 //function for robot control 
@@ -87,9 +103,10 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "control_node");
     ros::NodeHandle nh;
 
-    //initialize publisher and subscribers
+    //initialize publisher and subscribers and services
     pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-    ros::Subscriber sub5 = nh.subscribe("current_speed", 1, speedCallback);
+    ros::ServiceServer service_add = nh.advertiseService("increase_speed", add);
+    ros::ServiceServer service_reduce = nh.advertiseService("reduce_speed", reduce);
     ros::Subscriber sub1 = nh.subscribe("scan_left", 1, scanLeftCallback);
     ros::Subscriber sub2 = nh.subscribe("scan_right", 1, scanRightCallback);
     ros::Subscriber sub3 = nh.subscribe("scan_left_front", 1, scanFrontRightCallback);
