@@ -1,6 +1,6 @@
 # research-track-ros
 
-This code implements a control node for a robot simulation. The speed of the robot can be increased or reduced using services. 
+This code implements a control node for a robot simulation. The speed of the robot can be increased or reduced using services and user input. You can also reset the robot's position.
 
 ## use
 
@@ -8,6 +8,7 @@ Copy the 2 packages in your ros workspace src folder.
 Compile with `catkin_make`.
 Run using the command `roslaunch robot_control robot_launch.xml`
 To change speed you can call the `/reduce_speed` and `/increase_speed` empty services. 
+You can also input 1 to increase speed, 2 to reduce it and 3 to reset the robot's position.
 
 ## Nodes
 
